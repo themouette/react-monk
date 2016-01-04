@@ -1,0 +1,65 @@
+{
+  "name": "react-monk",
+  "version": "1.0.0",
+  "description": "React cli tool to help with your JavaScript fatigue",
+  "main": "lib/cli.js",
+  "repository": "git@github.com:themouette/react-monk.git",
+  "scripts": {
+    "clean": "rm -r lib",
+    "build": "babel src --out-dir lib",
+    "build:watch": "npm run build -- --watch",
+    "prepublish": "npm run clean && npm run build",
+    "test": "mocha --compilers jsx?:babel-register"
+  },
+  "keywords": [
+    "webpack",
+    "react",
+    "cli",
+    "generate",
+    "build",
+    "hotreload",
+    "monk"
+  ],
+  "author": "Julien Muetton <julien@muetton.me>",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.3.17",
+    "babel-plugin-transform-object-rest-spread": "^6.3.13"
+  },
+  "dependencies": {
+    "autoprefixer-loader": "^3.1.0",
+    "babel-core": "^6.3.26",
+    "babel-istanbul": "^0.5.9",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-react-transform": "^2.0.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-register": "^6.3.13",
+    "commander": "^2.9.0",
+    "css-loader": "^0.23.1",
+    "css-modules-require-hook": "^2.1.0",
+    "glob": "^6.0.3",
+    "html-webpack-plugin": "^1.7.0",
+    "minimatch": "^3.0.0",
+    "minimist": "^1.2.0",
+    "mocha": "^2.3.4",
+    "postcss": "^5.0.14",
+    "postcss-modules-extract-imports": "^1.0.0",
+    "postcss-modules-local-by-default": "^1.0.1",
+    "postcss-modules-scope": "^1.0.0",
+    "postcss-modules-values": "^1.1.1",
+    "react-transform-catch-errors": "^1.0.1",
+    "react-transform-hmr": "^1.0.1",
+    "react-transform-render-visualizer": "^0.3.0",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  },
+  "bin": {
+    "react-monk": "lib/cli.js",
+    "react-monk-build": "lib/cli-build.js",
+    "react-monk-transform": "lib/cli-transform.js",
+    "react-monk-serve": "lib/cli-serve.js",
+    "react-monk-test": "lib/cli-test.js"
+  }
+}
