@@ -9,7 +9,7 @@ import loadBabelConfig from './load-config';
  */
 const babelrc = path.join(process.cwd(), '.babelrc')
 const babelConfig  = loadBabelConfig(babelrc);
-require("babel-register")(babelConfig);
+require('babel-register')(babelConfig);
 
 /**
  * Allow css modules to be required
