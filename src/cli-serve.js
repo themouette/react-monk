@@ -63,12 +63,15 @@ const configuration = program.args
       ]);
     }
 
+    const canonicalName = path.basename(entryfile, '.js');
     return generateConfig({
-      entry,
+      entry: {
+        [canonicalName]: entry,
+      },
       output: {
         path: program.contentBase,
         publicPath: program.publicPath,
-        filename: path.basename(entry),
+        filename: '[name].js',
       },
       plugins,
       hmr: program.hmr,
@@ -77,11 +80,10 @@ const configuration = program.args
       // Use argument as title
       generateHtml: !program.html
         ? program.html
-        : (
-          program.html === true
-            ? { title: 'react-monk' }
-            : { title: program.html }
-        ),
+        : {
+          title: program.html === true ?  'react-monk' : program.html,
+          filename: `${canonicalName}.html`,
+        },
     });
   });
 

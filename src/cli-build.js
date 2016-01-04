@@ -30,25 +30,29 @@ if(!program.args.length) {
 
 const configuration = program.args
   .map(normalizeDir)
-  .map((entry) => generateConfig({
-    entry,
-    output: {
-      path: program.outDir,
-      publicPath: program.publicPath,
-      filename: path.basename(entry),
-    },
-    hmr: program.hmr,
-    catchErrors: program.catchErrors,
-    visualizer: program.visualizer,
-    // Use argument as title
-    generateHtml: !program.html
-      ? program.html
-      : (
-        program.html === true
-          ? { title: 'react-monk' }
-          : { title: program.html }
-      ),
-  }));
+  .map((entry) => {
+    const canonicalName = path.basename(entry, '.js');
+    return generateConfig({
+      entry: {
+        [canonicalName]: entry,
+      },
+      output: {
+        path: program.outDir,
+        publicPath: program.publicPath,
+        filename: '[name].js',
+      },
+      hmr: program.hmr,
+      catchErrors: program.catchErrors,
+      visualizer: program.visualizer,
+      // Use argument as title
+      generateHtml: !program.html
+        ? program.html
+        : {
+          title: program.html === true ?  'react-monk' : program.html,
+          filename: `${canonicalName}.html`,
+        },
+    });
+  });
 
 if (program.verbose) {
   logWebpackConfiguration(program)(configuration);
