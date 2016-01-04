@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import fs from 'fs';
 import path from 'path';
 import { spawn } from 'child_process';
@@ -31,9 +30,7 @@ if(!program.args.length) {
  *
  * @param Array args  the cli arguments
  */
-const extractFiles = (args) => {
-  var pattern = program.pattern;
-
+const extractFiles = (pattern, args) => {
   return args
     .map(function (fileOrDir) {
       var files;
@@ -63,7 +60,7 @@ const extractFiles = (args) => {
     .sort();
 }
 
-const filesToProcess = extractFiles(program.args);
+const filesToProcess = extractFiles(program.pattern, program.args);
 if (!filesToProcess || !filesToProcess.length) {
   throw new Error('No file matches pattern');
 }
@@ -75,13 +72,13 @@ const ignoredOptions = ['_', 'watch', 'w', 'coverage', 'pattern'];
 const extraArgs = Object.keys(options)
   .filter((key) =>  ignoredOptions.indexOf(key) === -1)
   .reduce(function(acc, key) {
-    var value = key.length === 1 ? '-' : '--';
-    value = value + key;
+    const prefix = key.length === 1 ? '-' : '--';
+    const value = prefix + key;
     if (typeof(options[key]) === 'boolean') {
-      return acc.concat([value]);
+      return acc.concat(value);
     }
 
-    return acc.concat([value, options[key]]);
+    return acc.concat(value, options[key]);
   }, []);
 
 if (program.watch) {
@@ -107,27 +104,31 @@ if (program.coverage) {
     : []
   )
   .concat([
-    require.resolve('../node_modules/.bin/_mocha'),
+      require.resolve('mocha/bin/_mocha'),
     '--'
   ])
   .concat(command);
 } else {
-  command = [require.resolve('../node_modules/.bin/_mocha')].concat(command);
+  command = [require.resolve('mocha/bin/_mocha')].concat(command);
 }
 
 /**
  * Spawn mocha command.
  */
-var runner = spawn(
-  // Use current node version
-  process.execPath,
-  command, {
-    env: { ...process.env },
-    detached: false,
-    stdio: 'inherit'
-  }
-);
+var runner = spawn(process.execPath, command, { stdio: 'inherit' });
 
-runner.on('exit', (exitStatus) => {
-  process.exit(exitStatus);
+runner.on('exit', (code, signal) => {
+  process.on('exit', function(){
+    if (signal) {
+      process.kill(process.pid, signal);
+    } else {
+      process.exit(code);
+    }
+  });
+});
+
+// terminate children.
+process.on('SIGINT', function () {
+  runner.kill('SIGINT'); // calls runner.abort()
+  runner.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
 });

@@ -9,7 +9,7 @@
     "build": "babel src --out-dir lib",
     "build:watch": "npm run build -- --watch",
     "prepublish": "npm run clean && npm run build",
-    "test": "mocha --compilers jsx?:babel-register"
+    "test": "mocha --compilers jsx?:babel-register --recursive"
   },
   "keywords": [
     "webpack",
@@ -56,10 +56,10 @@
     "webpack-dev-server": "^1.14.0"
   },
   "bin": {
-    "react-monk": "lib/cli.js",
-    "react-monk-build": "lib/cli-build.js",
-    "react-monk-transform": "lib/cli-transform.js",
-    "react-monk-serve": "lib/cli-serve.js",
-    "react-monk-test": "lib/cli-test.js"
+    "react-monk": "bin/react-monk",
+    "react-monk-build": "bin/react-monk-build",
+    "react-monk-transform": "bin/react-monk-transform",
+    "react-monk-serve": "bin/react-monk-serve",
+    "react-monk-test": "bin/react-monk-test"
   }
 }
