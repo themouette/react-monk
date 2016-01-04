@@ -1,0 +1,28 @@
+{
+  "name": "simple-component",
+  "version": "1.0.0",
+  "description": "A simple react-monk component with custom .babelrc",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build:lib": "react-monk transform src",
+    "build:lib:watch": "npm run build:lib -- --watch",
+    "prepublish": "npm run clean && npm run build:lib",
+    "test": "react-monk test",
+    "test:watch": "npm run test -- --watch"
+  },
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^0.14.5",
+    "react-dom": "^0.14.5"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.3.13",
+    "chai": "^3.4.1",
+    "enzyme": "^1.2.0",
+    "react-addons-test-utils": "^0.14.5"
+  }
+}

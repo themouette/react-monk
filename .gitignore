@@ -1,2 +1,7 @@
 /lib
 /node_modules
+
+# for samples
+node_modules
+dist
+lib
