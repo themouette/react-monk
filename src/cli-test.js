@@ -86,8 +86,9 @@ if (program.watch) {
 }
 
 let command = [
-    // Add a hook with babel configuration
-    '--require', require.resolve('./babel/hook'),
+    // Add hooks
+    '--require', require.resolve('./css-modules/hook'),
+    '--require', require.resolve('./babel/hook'), // keep last to avoid error
     '--recursive',
   ]
   .concat(extraArgs)
