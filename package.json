@@ -1,6 +1,6 @@
 {
   "name": "react-monk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React cli tool to help with your JavaScript fatigue",
   "main": "lib/cli.js",
   "repository": "git@github.com:themouette/react-monk.git",
