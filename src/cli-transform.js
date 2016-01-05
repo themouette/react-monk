@@ -5,24 +5,23 @@ import { spawn } from 'child_process';
 import program from 'commander';
 
 import normalizeDir from './utils/normalize-dir';
+import resolveBabelrc from './babel/resolve-babelrc';
+import { createTemporaryBabelrc, removeTemporaryBabelrc } from './babel/tmp-babelrc';
 
 
 program
   .description('process source code for npm publishing')
   .usage('[options] <src>')
-  .option('-w --watch', 'watch and continuously publish', false)
+  .option('-w --watch', 'watch and continuously publish')
   .option('-o --out-dir <dir>', 'specify output directory (default: ./lib)', normalizeDir, normalizeDir('./lib'))
-  .option('--source-maps [type]', 'compile with source maps', false)
+  .option('--source-maps [type]', 'compile with source maps')
+  .option('--no-copy-files', 'When compiling a directory copy over non-compilable files')
   .parse(process.argv);
 
 
 if(!program.args.length) {
   program.help();
 }
-
-// copy javascript files and css files
-// Execute `babel $SRC --out-dir $OUT_DIR --watch`
-// then copy all css files
 
 const src = program.args[0];
 
@@ -44,19 +43,34 @@ if (program.sourceMaps) {
   }
 }
 
-// Add local presets and plugins
+if (program.copyFiles) {
+  babelArgs = babelArgs.concat('--copy-files');
+}
+
+// Generate a temporary babelrc
+const reactMonkBabelrc = createTemporaryBabelrc(resolveBabelrc());
 babelArgs = babelArgs.concat([
-  '--presets',
-  [
-    require.resolve('babel-preset-es2015'),
-    require.resolve('babel-preset-react'),
-  ].join(','),
+  '--extends', reactMonkBabelrc,
 ]);
 
-spawn(babelExec, babelArgs);
+const babelProc = spawn(babelExec, babelArgs, {
+  cwd: process.cwd(),
+  stdio: 'inherit',
+});
 
-/**
- * TODO copy stylesheets
- * I did not give a thought on how to distribute stylesheets yet.
- */
-console.log('Stylesheets are not processed yet');
+babelProc.on('exit', (code, signal) => {
+  removeTemporaryBabelrc(reactMonkBabelrc);
+  process.on('exit', function(){
+    if (signal) {
+      process.kill(process.pid, signal);
+    } else {
+      process.exit(code);
+    }
+  });
+});
+
+// terminate children.
+process.on('SIGINT', function () {
+  babelProc.kill('SIGINT'); // calls babelProc.abort()
+  babelProc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+});

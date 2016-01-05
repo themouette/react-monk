@@ -1,6 +1,14 @@
 react-monk
 ==========
 
+> WARNING
+>
+> react-monk transform relies on https://github.com/babel/babel/pull/3234
+>
+> It it does not get merged, it means a lot of work to replicate babel-cli
+> features
+> Generating a local .babelrc would be a better option
+
 React-monk is here to help you with the JavaScript fatigue.
 
 Set up quickly a working environment with:

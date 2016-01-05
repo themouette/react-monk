@@ -3,12 +3,12 @@ import path from 'path';
 import hook from 'css-modules-require-hook';
 
 import loadBabelConfig from './load-config';
+import resolveBabelrc from './babel/resolve-babelrc';
 
 /**
  * Transform es6 with custom babel configuration
  */
-const babelrc = path.join(process.cwd(), '.babelrc')
-const babelConfig  = loadBabelConfig(babelrc);
+const babelConfig  = loadBabelConfig(resolveBabelrc());
 require('babel-register')(babelConfig);
 
 /**

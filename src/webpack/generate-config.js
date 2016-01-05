@@ -8,6 +8,7 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 import loadBabelConfig from '../babel/load-config';
+import resolveBabelrc from './babel/resolve-babelrc';
 
 
 const loaderMatchExtension = (extension) => (loader) => {
@@ -72,7 +73,7 @@ const generateConfig = (params = {}) => {
   let stylesheetLoaders;
 
   const options = {
-    babelrc: path.join(process.cwd(), '.babelrc'),
+    babelrc: resolveBabelrc(),
     plugins: [],
     devtool,
     hmr: false,
