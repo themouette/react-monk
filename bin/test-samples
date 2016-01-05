@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#######################################
+# Test react-monk on samples
+#######################################
+
+set -o nounset
+set -o errexit
+export LANG=C LC_ALL=C LC_MESSAGES=C
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+
+export PATH="$PATH:$DIR/bin"
+
+##################################################
+# Test simple-component
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   None
+##################################################
+test_simple_component() {
+    cd "$DIR/samples/simple-component"
+    npm run test
+    npm run build:demo
+    npm run prepublish
+}
+test_simple_component
+
+##################################################
+# Test custom-babelrc-component
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   None
+##################################################
+test_custom_babelrc_component() {
+    cd "$DIR/samples/custom-babelrc-component"
+    npm run test
+    npm run prepublish
+}
+test_custom_babelrc_component

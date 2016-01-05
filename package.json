@@ -9,7 +9,9 @@
     "build": "babel src --out-dir lib",
     "build:watch": "npm run build -- --watch",
     "prepublish": "npm run clean && npm run build",
-    "test": "mocha --compilers jsx?:babel-register --recursive"
+    "test": "mocha --compilers jsx?:babel-register --recursive",
+    "test:ci": "npm run test:samples && npm run test",
+    "test:samples": "./bin/test-samples"
   },
   "keywords": [
     "webpack",

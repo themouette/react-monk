@@ -1,5 +1,5 @@
 {
-  "name": "simple-component",
+  "name": "custom-babelrc-component",
   "version": "1.0.0",
   "description": "A simple react-monk component with custom .babelrc",
   "main": "lib/index.js",
