@@ -20,6 +20,18 @@ Set up quickly a working environment with:
 * hot module replacement
 * ...
 
+## How does it works?
+
+1. install **react-monk** `npm install react-monk --save-dev`
+2. profit with es2015, css modules, hot module replacement
+
+> As all projects are different, **react-monk** will not get into your way.
+> You can extend configuration with standard `webpack.config.js` and `.babelrc`,
+> they will be parsed and upgraded with **react-monk** goodness.
+
+Check [samples](https://github.com/themouette/react-monk/tree/master/samples)
+to see it in action.
+
 ## Setup a react monk project
 
 ``` javascript
