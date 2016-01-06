@@ -21,6 +21,7 @@ program
   .option('--html [title]', 'generate an index.html file', false)
   .option('-v --verbose', 'log webpack config')
   .option('--no-colors', 'deactivate colors', false)
+  .option('--webpack <config_file>', 'extends given config file', normalizeDir)
   .parse(process.argv);
 
 if(!program.args.length) {
@@ -33,6 +34,7 @@ const configuration = program.args
   .map((entry) => {
     const canonicalName = path.basename(entry, '.js');
     return generateConfig({
+      ...(program.webpack ? require(program.webpack) : {}),
       entry: {
         [canonicalName]: entry,
       },

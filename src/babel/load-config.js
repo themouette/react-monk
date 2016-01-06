@@ -1,21 +1,22 @@
 import fs from 'fs';
 
 /**
+ * Add a reference to local preset if not provided
+ */
+const addPresetIfMissing = (preset, presets) => {
+  if (presets.indexOf(preset) >= 0) {
+    return presets;
+  }
+  return [require.resolve(`babel-preset-${preset}`)].concat(presets);
+}
+
+/**
  * Read .babelrc
  *
  * @param string  babelrc the babelrc file to use.
  * @return Object
  */
 const loadBabelConfig = (babelrc) => {
-  /**
-   * Add a reference to local preset if not provided
-   */
-  const addIfMissing = (preset, presets) => {
-    if (presets.indexOf(preset) >= 0) {
-      return presets;
-    }
-    return [require.resolve(`babel-preset-${preset}`)].concat(presets);
-  }
   let ret = {
     presets: [],
     plugins: [],
@@ -39,8 +40,8 @@ const loadBabelConfig = (babelrc) => {
   }
 
   /* WARN anything you add here should be added in src/cli-publish.js as well */
-  ret.presets = addIfMissing('es2015', ret.presets);
-  ret.presets = addIfMissing('react', ret.presets);
+  ret.presets = addPresetIfMissing('es2015', ret.presets);
+  ret.presets = addPresetIfMissing('react', ret.presets);
   /* WARN anything you add here should be added in src/cli-publish.js as well */
 
   return ret;

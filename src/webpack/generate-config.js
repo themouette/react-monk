@@ -84,15 +84,18 @@ const generateConfig = (params = {}) => {
   };
 
   /**
-   * @param Array loaders  shortcut to `module: { loaders: [] }`
-   *
-   * Used to store modules for temporary processing.
+   * Ensure module.loaders are copies
    */
   if (!options.module) {
     options.module = {};
+  } else {
+    options.module = {...options.module};
   }
   if (!options.module.loaders) {
     options.module.loaders = [];
+  } else {
+    options.module.loaders = options.module.loaders
+      .map(loader => ({ ...loader })); // make a copy to prevent modification
   }
 
   /**
@@ -210,6 +213,7 @@ const generateConfig = (params = {}) => {
     }];
     options.module.loaders = stylesheetLoaders.concat(options.module.loaders);
   }
+
   /**
    * Prepend configured css modules loader
    */

@@ -25,6 +25,7 @@ program
   .option('--public-path <path>', 'public path on which application is exposed')
   .option('--content-base <path>', 'webpack-dev-server --content-base option', normalizeDir)
   .option('--history-api-fallback <path>', 'webpack-dev-server option', false)
+  .option('--webpack <config_file>', 'extends given config file', normalizeDir)
   .parse(process.argv);
 
 if(!program.args.length) {
@@ -65,6 +66,7 @@ const configuration = program.args
 
     const canonicalName = path.basename(entryfile, '.js');
     return generateConfig({
+      ...(program.webpack ? require(program.webpack) : {}),
       entry: {
         [canonicalName]: entry,
       },
