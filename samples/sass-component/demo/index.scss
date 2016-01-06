@@ -1,0 +1,12 @@
+.samples {
+  margin: 10px;
+}
+.sample {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid Thistle;
+}
+
+.sample::first-of-type {
+  margin-top: 0;
+}

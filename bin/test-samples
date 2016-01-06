@@ -43,3 +43,20 @@ test_custom_babelrc_component() {
     npm run prepublish
 }
 test_custom_babelrc_component
+
+##################################################
+# Test sass-component
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   None
+##################################################
+test_sass_component() {
+    cd "$DIR/samples/sass-component"
+    npm run test
+    npm run build:demo
+    npm run prepublish
+}
+test_sass_component
