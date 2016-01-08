@@ -33,7 +33,7 @@ const loaderMatchOneOfExtensions = (extensions) => (loader) => {
  */
 const prependLoader = (loaders, loader, options) => {
   let newLoaders = [];
-  let createdLoader = require.resolve(loader);
+  let createdLoader = loader;
 
   if (loaders && typeof(loaders) === 'string') {
     newLoaders = newLoaders.concat(loaders.split('!'));
@@ -149,7 +149,7 @@ const generateConfig = (params = {}) => {
    */
   if (useReactTransform && options.hmr) {
     loaderBabel.query['react-transform'].transforms.push({
-      'transform': require.resolve('react-transform-hmr'),
+      'transform': 'react-transform-hmr',
       'imports': ['react'],
       'locals': ['module'],
     });
@@ -163,7 +163,7 @@ const generateConfig = (params = {}) => {
    */
   if (useReactTransform && options.catchErrors) {
     loaderBabel.query['react-transform'].transforms.push({
-      'transform': require.resolve('react-transform-catch-errors'),
+      'transform': 'react-transform-catch-errors',
       'imports': ['react', 'redbox-react'],
     });
   }
@@ -176,7 +176,7 @@ const generateConfig = (params = {}) => {
    */
   if (useReactTransform && options.visualizer) {
     loaderBabel.query['react-transform'].transforms.push({
-      'transform': require.resolve('react-transform-render-visualizer'),
+      'transform': 'react-transform-render-visualizer',
     });
   }
   delete options.visualizer;
@@ -184,7 +184,7 @@ const generateConfig = (params = {}) => {
   // Append react transform plugin
   if (useReactTransform) {
     loaderBabel.query.plugins.push([
-      require.resolve('babel-plugin-react-transform'),
+      'babel-plugin-react-transform',
       loaderBabel.query['react-transform']
     ]);
     delete loaderBabel.query['react-transform'];
@@ -235,6 +235,7 @@ const generateConfig = (params = {}) => {
       loader.loaders = loader.loader;
     }
     delete loader.loader;
+    // In dev, deactivate autoprefixer to keep in sync with css-module hook
     loader.loaders = prependLoader(
       loader.loaders,
       'autoprefixer-loader',
@@ -245,7 +246,10 @@ const generateConfig = (params = {}) => {
       'css-loader',
       'modules&localIdentName=[name]__[local]___[hash:base64:5]&importLoaders=2&sourceMap'
     );
-    loader.loaders = prependLoader(loader.loaders, 'style-loader');
+    loader.loaders = prependLoader(
+      loader.loaders,
+      'style-loader'
+    );
   });
 
 
