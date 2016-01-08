@@ -99,6 +99,16 @@ const generateConfig = (params = {}) => {
   }
 
   /**
+   * Retrieve or add json loader
+   */
+  if (!options.module.loaders.filter(loaderMatchExtension('json')).length) {
+    options.module.loaders.push({
+      test: /\.json$/,
+      loader: 'json-loader',
+    });
+  }
+
+  /**
    * Retrieve and prepare javascript loader
    */
   loaderBabel = options.module.loaders.filter(loaderMatchExtension('js'))[0];

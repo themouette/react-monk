@@ -1,0 +1,37 @@
+{
+  "name": "server-prerender-app",
+  "version": "1.0.0",
+  "description": "A react-monk sample with prerendering express server.",
+  "main": "lib/server.js",
+  "scripts": {
+    "build:client": "react-monk build src/client.js --out-dir dist/public --no-html --webpack webpack.config.js",
+    "build:client:watch": "npm run build:client -- --watch",
+    "build:server": "react-monk transform src/server.js --out-dir dist/server --target node --webpack webpack.config.js",
+    "build:server:watch": "npm run build:server -- --watch",
+    "transform:server": "react-monk transform src/ --out-dir lib/",
+    "transform:server:watch": "npm run transform:server -- --watch",
+    "serve:dev": "PORT=1337 nodemon --watch lib/server.js --watch lib/server-dev.js --watch lib/server/routes/ lib/server-dev.js",
+    "serve:proxy": "react-monk serve src/client.js --public-path '/public/' --port 1338 --proxy http://localhost:1337",
+    "test": "react-monk test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "chokidar": "^1.4.2",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "install": "^0.4.1",
+    "npm": "^3.5.2",
+    "react": "^0.14.5",
+    "react-dom": "^0.14.5",
+    "source-map-support": "^0.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.8.1",
+    "webpack": "^1.12.10",
+    "webpack-dev-middleware": "^1.4.0",
+    "webpack-hot-middleware": "^2.6.0"
+  }
+}
