@@ -9,6 +9,11 @@ react-monk
 > features.
 > Instead, generating a local .babelrc would be a better option
 
+> WARNING
+>
+> React monk is under development and changes quickly
+> the best way to install is to git clone + npm link.
+
 React-monk is here to help you with the JavaScript fatigue.
 
 Set up quickly a working environment with:
@@ -36,7 +41,7 @@ to see it in action.
 
 ``` javascript
 npm init -y
-npm install react-monk --save-dev
+# npm install react-monk --save-dev
 npm install react react-dom --save
 ```
 
