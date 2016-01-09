@@ -13,7 +13,7 @@ import normalizeDir from './utils/normalize-dir';
 program
   .description('build a react component into a single script file')
   .usage('[options] <entrypoint>')
-  .option('--port <port>', 'port for serving the application', parseInt, 1337)
+  .option('--port <port>', 'port for serving the application', (x) => parseInt(x), 1337)
   .option('--host <host>', 'port for serving the application', '0.0.0.0')
   .option('--no-hmr', 'enable hot module replacement', false)
   .option('--catch-errors', 'enable error catching (requires redbox-react)', false)
@@ -26,6 +26,7 @@ program
   .option('--content-base <path>', 'webpack-dev-server --content-base option', normalizeDir)
   .option('--history-api-fallback <path>', 'webpack-dev-server option', false)
   .option('--webpack <config_file>', 'extends given config file', normalizeDir)
+  .option('--proxy <backendurl>', 'http url of service to proxify')
   .parse(process.argv);
 
 if(!program.args.length) {
@@ -102,6 +103,9 @@ const server = new WebpackDevServer(compiler, {
   historyApiFallback: program.historyApiFallback,
   stats: buildStatOptions(program),
   headers: { 'Access-Control-Allow-Origin': '*' },
+  proxy: program.proxy
+    ? { '/': { target: program.proxy } }
+    : program.proxy,
 });
 
 server.listen(program.port, program.host, (err) => {

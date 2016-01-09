@@ -42,8 +42,11 @@
     "source-map-support": "^0.4.0"
   },
   "devDependencies": {
+    "chai": "^3.4.1",
     "chokidar": "^1.4.2",
     "concurrently": "^1.0.0",
-    "nodemon": "^1.8.1"
+    "enzyme": "^1.2.0",
+    "nodemon": "^1.8.1",
+    "react-addons-test-utils": "^0.14.5"
   }
 }

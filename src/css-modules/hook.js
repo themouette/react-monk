@@ -7,9 +7,7 @@ import hook from 'css-modules-require-hook';
 
 hook({
   extensions: ['css'],
-  generateScopedName: function(exportedName, path) {
-    return exportedName;
-  },
+  generateScopedName: '[name]__[local]___[hash:base64:5]',
   // Look at https://www.npmjs.com/package/css-modules-require-hook#preprocesscss-function
   // to setup a preprocessor
   //

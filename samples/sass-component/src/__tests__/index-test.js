@@ -13,6 +13,7 @@ describe('<MyAwesomeComponent />', () => {
 
   it('renders an `.wrapper`', () => {
     const wrapper = shallow(<MyAwesomeComponent />);
-    expect(wrapper.find('.wrapper')).to.have.length(1);
+    // due to css-modules composes, we split classnames
+    expect(wrapper.find(`.${styles.wrapper.split(' ')[0]}`)).to.have.length(1);
   });
 });

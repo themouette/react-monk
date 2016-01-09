@@ -8,12 +8,29 @@ import logBuildStats from './webpack/log-build-stats';
 import logWebpackConfiguration from './webpack/log-configuration';
 import normalizeDir from './utils/normalize-dir';
 
+const validateTarget = (option) => {
+  const validTargets = [
+    'web',
+    'webworker',
+    'node',
+    'async-node',
+    'node-webkit',
+    'atom',
+  ];
+
+  if (validTargets.indexOf(option) === -1) {
+    throw new Error('Valid target options are ' + validTargets.join(', '));
+  }
+
+  return option;
+}
 
 program
   .description('build a react component into a single script file')
   .usage('[options] <entrypoint ...>')
   .option('-o --out-dir <dir>', 'specify output directory (default: ./dist)', normalizeDir, normalizeDir('./dist'))
   .option('-w --watch', 'watch and continuously build entrypoint', false)
+  .option('--target <webpack-target>', 'webpack target', validateTarget)
   .option('--public-path <path>', 'public path on which application is exposed', '/')
   .option('--hmr', 'enable hot module replacement', false)
   .option('--catch-error', 'enable error catching (red box)', false)
@@ -43,6 +60,7 @@ const configuration = program.args
         publicPath: program.publicPath,
         filename: '[name].js',
       },
+      target: program.target,
       hmr: program.hmr,
       catchErrors: program.catchErrors,
       visualizer: program.visualizer,

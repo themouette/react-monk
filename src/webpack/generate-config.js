@@ -6,6 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 import loadBabelConfig from '../babel/load-config';
 import resolveBabelrc from '../babel/resolve-babelrc';
@@ -65,9 +66,9 @@ const generateConfig = (params = {}) => {
   const __SERVER__ = params.target === 'node';
   const __BROWSER__ = !__SERVER__;
 
-  const devtool = __DEV__
-    ? 'cheap-eval-source-map'
-    : __SERVER__ ? 'source-map' : false;
+  const devtool = __SERVER__
+    ? '#source-map'
+    : __DEV__ ? '#cheap-eval-source-map' : false;
 
   let loaderBabel;
   let stylesheetLoaders;
@@ -76,10 +77,20 @@ const generateConfig = (params = {}) => {
     babelrc: resolveBabelrc(),
     plugins: [],
     devtool,
+    debug: __DEV__,
+    cache: false,
     hmr: false,
     catchErrors: false,
     visualizer: false,
     generateHtml: false,
+    ignoreNodeModules: __SERVER__,
+    resolveLoader: {
+      modulesDirectories: [
+				'web_loaders', 'web_modules', 'node_loaders', 'node_modules',
+        // Allow to load react-monk loaders
+        path.resolve(__dirname, '..', '..', 'node_modules'),
+      ],
+    },
     ...(params || {}),
   };
 
@@ -96,6 +107,16 @@ const generateConfig = (params = {}) => {
   } else {
     options.module.loaders = options.module.loaders
       .map(loader => ({ ...loader })); // make a copy to prevent modification
+  }
+
+  /**
+   * output.libraryTarget should be 'commonjs' in node
+   */
+  if (__SERVER__ && options.output && ! options.output.libraryTarget) {
+    options.output = {
+      ...options.output,
+      libraryTarget: 'commonjs',
+    };
   }
 
   /**
@@ -235,7 +256,6 @@ const generateConfig = (params = {}) => {
       loader.loaders = loader.loader;
     }
     delete loader.loader;
-    // In dev, deactivate autoprefixer to keep in sync with css-module hook
     loader.loaders = prependLoader(
       loader.loaders,
       'autoprefixer-loader',
@@ -243,19 +263,27 @@ const generateConfig = (params = {}) => {
     );
     loader.loaders = prependLoader(
       loader.loaders,
-      'css-loader',
+      // on the server, transform css into JSON
+      __SERVER__ ? 'css/locals' : 'css-loader',
       'modules&localIdentName=[name]__[local]___[hash:base64:5]&importLoaders=2&sourceMap'
     );
-    loader.loaders = prependLoader(
-      loader.loaders,
-      'style-loader'
-    );
+    if (__BROWSER__) {
+      if (__DEV__) {
+        loader.loaders = prependLoader(
+          loader.loaders,
+          'style-loader'
+        );
+      } else {
+        // In production mode, extract css into its own file
+        loader.loader = ExtractTextPlugin.extract('style-loader', loader.loaders.join('!'));
+        delete loader.loaders;
+
+        options.plugins.unshift(
+          new ExtractTextPlugin('[name].css', {allChunks: true})
+        );
+      }
+    }
   });
-
-
-  /**
-   * Prepend css modules transformers
-   */
 
 
   /**
@@ -268,6 +296,22 @@ const generateConfig = (params = {}) => {
     plugins: [],
   };
   delete options.module;
+
+  /**
+   * @param Boolean ignoreNodeModules do not include node_modules.
+   *
+   * Usualy used for server code, as node_modules are available at runtinme.
+   */
+  if (options.ignoreNodeModules) {
+    const nodeModules = fs
+      .readdirSync(path.join(process.cwd(), 'node_modules'))
+      .filter(function isNotBin(x) { return x !== '.bin'; });
+    ret.externals = []
+      .concat(Array.isArray(options.externals) ? options.externals : [])
+      .concat(nodeModules);
+    delete options.externals;
+  }
+  delete options.ignoreNodeModules;
 
   /**
    * @param Object generateHtml configuration for HtmlWebpackPlugin (null to skip)

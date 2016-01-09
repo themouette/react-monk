@@ -60,3 +60,19 @@ test_sass_component() {
     npm run prepublish
 }
 test_sass_component
+
+##################################################
+# Test server-prerender-app
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   None
+##################################################
+test_prerender_app() {
+    cd "$DIR/samples/server-prerender-app"
+    npm run test
+    npm run release
+}
+test_prerender_app

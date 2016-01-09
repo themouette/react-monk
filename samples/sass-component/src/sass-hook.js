@@ -8,9 +8,7 @@ import sass from 'node-sass';
 
 hook({
   extensions: ['.scss'],
-  generateScopedName: function(exportedName, path) {
-    return exportedName;
-  },
+  generateScopedName: '[name]__[local]___[hash:base64:5]',
   preprocessCss: (css, filename) => sass.renderSync({ data: css }).css,
 });
 
