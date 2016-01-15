@@ -4,13 +4,13 @@ import { spawn } from 'child_process';
 
 import program from 'commander';
 
-import normalizeDir from './utils/normalize-dir';
-import resolveBabelrc from './babel/resolve-babelrc';
+import normalizeDir from '../utils/normalize-dir';
+import resolveBabelrc from '../babel/resolve-babelrc';
 import { createTemporaryBabelrc, removeTemporaryBabelrc } from './babel/tmp-babelrc';
 
 
 program
-  .description('process source code for npm publishing')
+  .description('Start a node server with hot reloading and restart on crash')
   .usage('[options] <src>')
   .option('-w --watch', 'watch and continuously publish')
   .option('-o --out-dir <dir>', 'specify output directory (default: ./lib)', normalizeDir, normalizeDir('./lib'))

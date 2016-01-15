@@ -3,10 +3,10 @@ import path from 'path';
 import program from 'commander';
 import webpack from 'webpack';
 
-import generateConfig from './webpack/generate-config';
-import logBuildStats from './webpack/log-build-stats';
-import logWebpackConfiguration from './webpack/log-configuration';
-import normalizeDir from './utils/normalize-dir';
+import generateConfig from '../webpack/generate-config';
+import logBuildStats from '../webpack/log-build-stats';
+import logWebpackConfiguration from '../webpack/log-configuration';
+import normalizeDir from '../utils/normalize-dir';
 
 const validateTarget = (option) => {
   const validTargets = [

@@ -6,7 +6,7 @@ import program from 'commander';
 import glob from 'glob';
 import minimatch from 'minimatch';
 
-import loadBabelConfig from './babel/load-config';
+import loadBabelConfig from '../babel/load-config';
 
 program
   .description('launch mocha tests in node')

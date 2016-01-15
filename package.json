@@ -44,6 +44,7 @@
     "glob": "^6.0.3",
     "html-webpack-plugin": "^1.7.0",
     "json-loader": "^0.5.4",
+    "lodash": "^3.10.1",
     "minimatch": "^3.0.0",
     "minimist": "^1.2.0",
     "mocha": "^2.3.4",
@@ -62,8 +63,8 @@
   "bin": {
     "react-monk": "bin/react-monk",
     "react-monk-build": "bin/react-monk-build",
-    "react-monk-transform": "bin/react-monk-transform",
+    "react-monk-start": "bin/react-monk-start",
     "react-monk-serve": "bin/react-monk-serve",
-    "react-monk-test": "bin/react-monk-test"
+    "react-monk-mocha": "bin/react-monk-mocha"
   }
 }
